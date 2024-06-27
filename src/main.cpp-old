@@ -1,0 +1,50 @@
+#include <Arduino.h>
+#include <SmartLeds.h>
+
+
+const int LED_COUNT = 32; // 256 
+const int DATA_PIN = 14;
+const int CHANNEL = 0;
+
+int stav = 0;
+
+// SmartLed -> RMT driver (WS2812/WS2812B/SK6812/WS2813)
+SmartLed leds(LED_WS2812, LED_COUNT, DATA_PIN, CHANNEL, DoubleBuffer);
+
+void SetLedAll(uint8_t R, uint8_t G, uint8_t B)
+{
+    for (int i = 0; i < (LED_COUNT/2); i++)
+        leds[i] = Rgb{R, G, B}; // kazda barva 0-255, celkem max 20*255 
+    leds.wait();
+    leds.show();
+}
+// ------------------------------------------------------------------------------------------------
+
+int a = 0, c = -1, slider = 0; // testovaci promenne
+
+void setup()
+{
+    Serial.begin(115200);
+    //leds[20] = Rgb{30, 0, 0};
+}
+
+void loop()
+{
+
+  SetLedAll(10, 0, 0);
+  delay(1000);
+  leds.wait();
+  leds.show();
+
+  SetLedAll(0, 0, 0);
+  delay(500);
+  leds.wait();
+  leds.show();
+
+
+    a++;
+    //printf("a: %i \n", a); // vypada to, jako kdyby se hlavni smycka do okamziku pripojeni terminalu vubec nerozjela ... smycka ceka na printf ?
+    Serial.println("Ahoj ");
+    Serial.println(a);
+}
+
